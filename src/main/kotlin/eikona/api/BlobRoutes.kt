@@ -31,6 +31,10 @@ fun Route.blobRouting() {
             call.respond("Completed $uploadedParts uploads")
         }
 
+        get {
+            call.respond(blobService.listBlobs().toString())
+        }
+
         get("{id?}") {
             when (val storageResponse = blobService.getBlob(UUID.fromString(call.parameters["id"]))) {
                 is StorageResponse.Invalid -> call.respond(storageResponse.message)
@@ -41,9 +45,5 @@ fun Route.blobRouting() {
         delete("{id?}") {
             blobService.removeBlob(UUID.fromString(call.parameters["id"]))
         }
-    }
-
-    get("/blob/list") {
-        call.respond(blobService.listBlobs().toString())
     }
 }
