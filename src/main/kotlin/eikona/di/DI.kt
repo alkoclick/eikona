@@ -1,9 +1,13 @@
 package eikona.di
 
-import eikona.specs.StorageSpec
-import eikona.storage.InMemoryStorage
+import eikona.specs.AuthorizationStorageSpec
+import eikona.specs.BlobStorageSpec
+import eikona.storage.AuthorizationStorageInMemory
+import eikona.storage.BlobStorageInMemory
 
 object DI {
 
-    val storageDriver: StorageSpec by lazy { InMemoryStorage() }
+    val blobStorage: BlobStorageSpec by lazy { BlobStorageInMemory }
+
+    val authStorage: AuthorizationStorageSpec by lazy { AuthorizationStorageInMemory }
 }

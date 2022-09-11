@@ -8,9 +8,6 @@ apply plugin: 'application'
 group = 'io.eikona'
 mainClassName = 'Entrypoint'
 
-sourceCompatibility = 17.0
-targetCompatibility = 17.0
-
 repositories {
     mavenCentral()
 //    maven { url 'https://jitpack.io' }
@@ -18,12 +15,17 @@ repositories {
 }
 
 def ktorV = '2.1.1'
+def kotlinV = '1.7.10'
 
 dependencies {
 //    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
     implementation "io.ktor:ktor-server-core:$ktorV"
     implementation "io.ktor:ktor-server-netty:$ktorV"
-
+    testImplementation("io.ktor:ktor-server-test-host:$ktorV") {
+        /// Damn Junit 4 always being pulled in randomly
+        exclude group: 'junit', module: 'junit'
+    }
+    testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlinV"
 }
 
 test {
