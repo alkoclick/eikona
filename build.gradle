@@ -1,5 +1,14 @@
-plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.7.10'
+buildscript {
+    ext.kotlin_version = "1.7.10"
+    ext.ktor_version = '2.1.1'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
 }
 
 apply plugin: 'kotlin'
@@ -8,24 +17,29 @@ apply plugin: 'application'
 group = 'io.eikona'
 mainClassName = 'Entrypoint'
 
-repositories {
-    mavenCentral()
-//    maven { url 'https://jitpack.io' }
-//    jcenter()
+compileKotlin {
+    kotlinOptions.jvmTarget = "11"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "11"
 }
 
-def ktorV = '2.1.1'
-def kotlinV = '1.7.10'
+repositories {
+    mavenCentral()
+}
+
 
 dependencies {
 //    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
-    implementation "io.ktor:ktor-server-core:$ktorV"
-    implementation "io.ktor:ktor-server-netty:$ktorV"
-    testImplementation("io.ktor:ktor-server-test-host:$ktorV") {
+    implementation "io.ktor:ktor-server-core:$ktor_version"
+    implementation "io.ktor:ktor-server-netty:$ktor_version"
+    implementation 'ch.qos.logback:logback-classic:1.2.5'
+    implementation "org.mapdb:mapdb:3.0.8"
+    testImplementation("io.ktor:ktor-server-test-host:$ktor_version") {
         /// Damn Junit 4 always being pulled in randomly
         exclude group: 'junit', module: 'junit'
     }
-    testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlinV"
+    testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
 }
 
 test {
@@ -36,11 +50,4 @@ test {
             events 'passed', 'failed', 'skipped', 'PASSED', 'FAILED', 'SKIPPED'
         }
     }
-}
-
-compileKotlin {
-    kotlinOptions.jvmTarget = "11"
-}
-compileTestKotlin {
-    kotlinOptions.jvmTarget = "11"
 }
