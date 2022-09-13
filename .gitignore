@@ -134,3 +134,4 @@ docs/_templates
 .idea/*
 cache
 mapDb
+sqlite.db

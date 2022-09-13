@@ -1,8 +1,7 @@
-package eikona.storage
+package eikona.storage.`object`
 
 import eikona.specs.StorageResponse
 import eikona.specs.BlobStorageSpec
-import org.mapdb.DBMaker
 import org.mapdb.Serializer
 import java.util.*
 

@@ -1,4 +1,4 @@
-package eikona.storage
+package eikona.storage.`object`
 
 import org.mapdb.DBMaker
 import kotlin.concurrent.thread

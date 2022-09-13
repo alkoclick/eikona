@@ -3,17 +3,17 @@ Hobby project. Eikona will be a private photo hosting application that doesn't m
 
 ## Current goals
 - Choose and configure settings based on config
-- Allow sharing with public
+- Allow sharing with public audiences (set up share route and some UUID corresponding to public users )
 
 ## Tooling
 
 - Kotlin
 - Ktor for the API server
-- Junit for testing? Or something more Kotlin specific?
-- OpenAPI for the API specs? Ktor compatibility is poor
+- Junit + Kotest for testing
+- SQL DB for relational data
 - S3 compatible block storage (S3 for prod and Minio for testing)
 - docker-compose for local testing
 
 #### Pending
 - What toolset to use for permissions? Themis looks interesting
-- Use SQL to store object relationships such as file shares?
+- OpenAPI for the API specs? Ktor compatibility is poor

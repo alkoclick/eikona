@@ -1,4 +1,4 @@
-package eikona.storage
+package eikona.storage.`object`
 
 import eikona.specs.StorageResponse
 import eikona.specs.BlobStorageSpec

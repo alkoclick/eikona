@@ -4,8 +4,6 @@ import java.util.UUID
 
 interface AuthorizationStorageSpec : CRDStorageSpec<UUID, Authorization> {
 
-    fun listByBlob(blobUUID: UUID): StorageResponse<Collection<Authorization>>
-
     fun canDo(blobUUID: UUID, userUUID: UUID, authorizationType: AuthorizationType): StorageResponse<Boolean>
 }
 
