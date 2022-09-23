@@ -1,5 +1,6 @@
 package eikona.storage.relational
 
+import eikona.ConfigSchema
 import eikona.specs.Authorization
 import eikona.specs.AuthorizationStorageSpec
 import eikona.specs.AuthorizationType
@@ -13,10 +14,10 @@ import org.mapdb.DataOutput2
 import org.mapdb.Serializer
 import java.util.*
 
-object AuthorizationStorageAccessor : AuthorizationStorageSpec {
+class AuthorizationStorageAccessor(relationalStorage: ConfigSchema.Storage.RelationalStorage) : AuthorizationStorageSpec {
 
     init {
-        SQLDatabase.connection
+        SQLDatabase.createConnection(relationalStorage.url, relationalStorage.driver)
         transaction {
             SchemaUtils.createMissingTablesAndColumns(AuthorizationsTable)
         }

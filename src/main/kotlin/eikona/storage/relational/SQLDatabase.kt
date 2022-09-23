@@ -6,8 +6,8 @@ import java.sql.Connection
 
 object SQLDatabase {
 
-    val connection by lazy {
-        Database.connect(url = "jdbc:sqlite:sqlite.db", driver = "org.sqlite.JDBC")
+    fun createConnection(url: String, driver: String) {
+        Database.connect(url, driver)
         TransactionManager.manager.defaultIsolationLevel =
             Connection.TRANSACTION_SERIALIZABLE
     }

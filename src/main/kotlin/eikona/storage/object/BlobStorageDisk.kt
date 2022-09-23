@@ -5,9 +5,9 @@ import eikona.specs.BlobStorageSpec
 import org.mapdb.Serializer
 import java.util.*
 
-object BlobStorageDisk : BlobStorageSpec {
+class BlobStorageDisk(filename: String) : BlobStorageSpec {
 
-    private val blobs = StorageDisk.fileDb.hashMap(
+    private val blobs = StorageDisk.makeFileDb(filename).hashMap(
         "blob", keySerializer = Serializer.UUID, valueSerializer = Serializer.BYTE_ARRAY
     ).createOrOpen()
 
