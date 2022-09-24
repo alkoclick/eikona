@@ -1,0 +1,7 @@
+.fullpage.grid {
+    height: 100%;
+}
+
+.nottoowide.column {
+    max-width: 450px;
+}
