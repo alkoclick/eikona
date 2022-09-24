@@ -1,8 +1,9 @@
 package eikona.api
 
-import eikona.ui.ImagePage
-import eikona.ui.LoginPage
-import io.ktor.http.*
+import eikona.di.DI
+import eikona.ui.pages.HomePage
+import eikona.ui.pages.ImagePage
+import eikona.ui.pages.LoginPage
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.html.*
@@ -25,18 +26,25 @@ fun Route.uiRoutes() {
 }
 
 fun Route.loginRoutes() {
-    get("/") {
-        call.respondRedirect("/login")
+    authenticate("auth-session") {
+        get("/") {
+            call.respondHtml { HomePage(call.principal()!!).apply { render() } }
+        }
     }
     get("/login") {
         call.respondHtml { LoginPage().apply { render() } }
+    }
+    get("/logout") {
+        call.sessions.clear<UserIdPrincipal>()
+        DI.sessionStorage.invalidate(call.principal<UserIdPrincipal>()?.name.toString())
+        call.respondRedirect("/login")
     }
     authenticate("auth-form") {
         post("/login") {
             val principal = call.principal<UserIdPrincipal>()
             // Set the cookie
             call.sessions.set(principal)
-            call.respond(status = HttpStatusCode.OK, "Ok!")
+            call.respondRedirect("/")
         }
     }
 }

@@ -1,4 +1,4 @@
-package eikona.ui
+package eikona.ui.templates
 
 import kotlinx.html.HTML
 

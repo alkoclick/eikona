@@ -1,8 +1,9 @@
-package eikona.ui
+package eikona.ui.pages
 
+import eikona.ui.templates.DefaultPageTemplate
 import kotlinx.html.*
 
-class LoginPage : DefaultTemplate {
+class LoginPage : DefaultPageTemplate {
 
     override fun BODY.renderBody() {
         div("ui middle aligned center aligned fullpage grid") {
@@ -13,7 +14,7 @@ class LoginPage : DefaultTemplate {
                         text("Log in to your Eikona account")
                     }
                 }
-                form(classes = "ui large form") {
+                form(classes = "ui large form", method = FormMethod.post) {
                     div(classes = "ui stacked segment") {
                         div(classes = "field") {
                             textInput(name = "username") {
@@ -27,7 +28,7 @@ class LoginPage : DefaultTemplate {
 
                         }
                         div(classes = "field") {
-                            submitInput(classes = "ui fluid submit button")
+                            submitInput(classes = "ui fluid violet submit button")
                         }
                     }
                 }

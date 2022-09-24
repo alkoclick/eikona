@@ -1,8 +1,8 @@
-package eikona.ui
+package eikona.ui.templates
 
 import kotlinx.html.*
 
-interface DefaultTemplate : UIPage {
+interface DefaultPageTemplate : UIPage {
 
     override fun HTML.render() {
         head {
