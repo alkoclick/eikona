@@ -4,6 +4,7 @@ Hobby project. Eikona will be a private photo hosting application that doesn't m
 ## Current goals
 - Allow sharing with public audiences (set up share route and some UUID corresponding to public users )
 - Readd list functionality based on permissions?
+- Web UI
 
 ## Tooling
 

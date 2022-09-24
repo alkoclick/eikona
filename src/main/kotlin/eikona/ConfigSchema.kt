@@ -16,6 +16,7 @@ data class ConfigSchema(
     data class Storage(
         val objects: ObjectStorage,
         val relational: RelationalStorage,
+        val sessions: SessionsStorage
     ) {
         sealed class ObjectStorage {
             data class MapDBFile(val filename: String) : ObjectStorage()
@@ -36,6 +37,11 @@ data class ConfigSchema(
                 RelationalStorage("jdbc:sqlite:file:test?mode=memory&cache=shared", "org.sqlite.JDBC")
 
             object SQLiteFile : RelationalStorage("jdbc:sqlite:sqlite.db", "org.sqlite.JDBC")
+        }
+
+        sealed class SessionsStorage {
+            data class DirectorySessionStorage(val filename: String): SessionsStorage()
+            object MemorySessionStorage: SessionsStorage()
         }
     }
 }

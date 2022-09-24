@@ -3,7 +3,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Route.appInfoRoutes() {
-    route("/health") {
+    route("/api/health") {
         get {
             call.respond("Ok!")
         }
