@@ -5,8 +5,8 @@ import kotlinx.html.*
 
 class LoginPage : DefaultPageTemplate {
 
-    override fun BODY.renderBody() {
-        div("ui middle aligned center aligned fullpage grid") {
+    override fun renderBody(body: BODY) {
+        body.div("ui middle aligned center aligned fullpage grid") {
             div("nottoowide column") {
                 h2("ui image header") {
 //                    img(classes = "image", src = "")

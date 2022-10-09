@@ -1,31 +1,21 @@
 package eikona.ui.templates
 
+import eikona.ui.templates.StandardElements.topBar
 import io.ktor.server.auth.*
 import kotlinx.html.*
 
 interface AuthenticatedPageTemplate : DefaultPageTemplate {
     val user: UserIdPrincipal
 
-    override fun HTML.render() {
-        head {
-            renderHead()
+    override fun render(html: HTML) {
+        html.head {
+            renderHead(this)
         }
-        body {
-            renderTopBar()
-            renderBody()
+        html.body {
+            topBar(user)
+            renderBody(this)
         }
     }
 
-    fun BODY.renderTopBar() {
-        div("ui two item menu") {
-            div("ui fluid container") {
-                p("ui item") {
-                    text("User: ${user?.name ?: "Not logged in"}")
-                }
-                a(href = "/logout", classes = "ui item") {
-                    text("Logout")
-                }
-            }
-        }
-    }
+
 }

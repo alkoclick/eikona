@@ -20,7 +20,7 @@ fun Route.uiRoutes() {
     }
     authenticate("auth-session") {
         get("/file/{id?}") {
-            call.respondHtml { ImagePage(call).apply { render() } }
+            call.respondHtml { ImagePage(call).render(this) }
         }
     }
 }
@@ -28,11 +28,13 @@ fun Route.uiRoutes() {
 fun Route.loginRoutes() {
     authenticate("auth-session") {
         get("/") {
-            call.respondHtml { HomePage(call.principal()!!).apply { render() } }
+            call.respondHtml {
+                HomePage(call.principal()!!).render(this)
+            }
         }
     }
     get("/login") {
-        call.respondHtml { LoginPage().apply { render() } }
+        call.respondHtml { LoginPage().render(this) }
     }
     get("/logout") {
         call.sessions.clear<UserIdPrincipal>()

@@ -4,5 +4,5 @@ import kotlinx.html.HTML
 
 interface UIPage {
 
-    fun HTML.render()
+    fun render(html: HTML)
 }

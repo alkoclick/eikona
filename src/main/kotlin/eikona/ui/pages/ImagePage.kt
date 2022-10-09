@@ -1,20 +1,30 @@
 package eikona.ui.pages
 
-import eikona.ui.templates.UIPage
+import eikona.ui.templates.AuthenticatedPageTemplate
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import kotlinx.html.*
 
-class ImagePage(val call: ApplicationCall) : UIPage {
+class ImagePage(call: ApplicationCall) : AuthenticatedPageTemplate {
+    val imgUuid = call.parameters["id"]
+    override val user: UserIdPrincipal = call.principal()!!
 
-    override fun HTML.render() {
-        val imgUuid = call.parameters["id"]
-        head {
-            title = "Eikona"
+    override fun renderHead(head: HEAD) {
+        super.renderHead(head)
+        head.apply {
+            script(src = "https://unpkg.com/ml5@latest/dist/ml5.min.js", block = {})
+            script(src = "/assets/js/faceRecognition.js", block = {})
         }
-        body {
-            div("container") {
-                text("Image: $imgUuid")
-                img(src = "/api/blob/$imgUuid")
+    }
+
+    override fun renderBody(body: BODY) {
+        body.apply {
+            div("ui middle aligned center aligned fullpage grid") {
+                div("column") {
+                    // Populated with face detection
+                    h2("ui header")
+                    img(src = "/api/blob/$imgUuid", classes = "img-fluid frame img")
+                }
             }
         }
     }

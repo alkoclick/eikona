@@ -136,3 +136,4 @@ cache
 mapDb
 sqlite.db
 sessions
+dev-notes.yaml

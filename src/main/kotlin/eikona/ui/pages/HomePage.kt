@@ -8,12 +8,12 @@ import kotlinx.html.h2
 
 class HomePage(override val user: UserIdPrincipal) : AuthenticatedPageTemplate {
 
-    override fun BODY.renderBody() {
-        div("ui middle aligned center aligned fullpage grid") {
-            div("column") {
-                h2("ui header") {
-                    div(classes = "content") {
-                        text("Welcome to Eikona!")
+    override fun renderBody(body: BODY) {
+        body.div("ui middle aligned center aligned fullpage grid") {
+            this.div("column") {
+                this.h2("ui header") {
+                    this.div(classes = "content") {
+                        this.text("Welcome to Eikona!")
                     }
                 }
             }
