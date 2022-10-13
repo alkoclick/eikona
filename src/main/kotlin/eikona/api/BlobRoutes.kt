@@ -3,12 +3,13 @@ package eikona.api
 import eikona.services.BlobService
 import eikona.specs.StorageResponse
 import io.ktor.http.*
-import io.ktor.http.content.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.*
 
 fun Route.blobRouting() {
@@ -22,23 +23,13 @@ fun Route.blobRouting() {
                     return@post
                 }
                 val userUUID = UUID.fromString(call.principal<UserIdPrincipal>()?.name.toString())
-                // retrieve all multipart data (suspending)
-                val multipart = call.receiveMultipart()
-                var uploadedParts = 0
-                val keys = mutableListOf<UUID>()
-                multipart.forEachPart { part ->
-                    // if part is a file (could be form item)
-                    if (part is PartData.FileItem) {
-                        val bytes = part.streamProvider().readBytes()
-                        BlobService.create(UUID.randomUUID(), bytes, userUUID).also {
-                            if (it is StorageResponse.Ok) keys += it.content
-                        }
-                        uploadedParts++
-                    }
-                    // make sure to dispose of the part after use to prevent leaks
-                    part.dispose()
+                // retrieve all bytes (suspending)
+                val bytes = withContext(Dispatchers.IO) { call.receiveStream().readAllBytes() }
+                when (val storageResponse = BlobService.create(UUID.randomUUID(), bytes, userUUID)) {
+                    is StorageResponse.Invalid -> call.respond(HttpStatusCode.BadRequest,
+                        "{ \"Message\" : \"${storageResponse}\" }")
+                    is StorageResponse.Ok -> call.respond("{ \"UUID\" : \"${storageResponse.content}\" }")
                 }
-                call.respond("Completed $uploadedParts uploads and uploaded $keys")
             }
 
             get("{id?}") {

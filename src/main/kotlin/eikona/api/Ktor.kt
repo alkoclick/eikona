@@ -7,7 +7,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
-import java.io.File
+import kotlin.collections.set
 
 
 fun Application.config() {
@@ -34,10 +34,22 @@ fun Application.config() {
             userParamName = "username"
             passwordParamName = "password"
             validate { credentials ->
-                println(credentials)
                 UserIdPrincipal(credentials.name)
             }
         }
+//        oauth {
+//            urlProvider = { "" }
+//            providerLookup = {
+//                OAuthServerSettings.OAuth2ServerSettings(
+//                    name = "TestAuth0",
+//                    authorizeUrl = "",
+//                    requestMethod = HttpMethod.Post,
+//                    clientId = "1vNXgpgZa25PGWt33JiYKG3OMb2kNrPL",
+//                    clientSecret = "gMHqaLxD-CzVK9uDr0Gr1Ok-19gRq1SqPcbJA2fIeOaIMyVHeCcMbJr1cciIg4Ez",
+//                )
+//            }
+//            client = httpClient
+//        }
     }
     routing {
         appInfoRoutes()

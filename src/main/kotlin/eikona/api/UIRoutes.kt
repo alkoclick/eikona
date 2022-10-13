@@ -4,6 +4,7 @@ import eikona.di.DI
 import eikona.ui.pages.HomePage
 import eikona.ui.pages.ImagePage
 import eikona.ui.pages.LoginPage
+import eikona.ui.pages.UploadPage
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.html.*
@@ -21,6 +22,9 @@ fun Route.uiRoutes() {
     authenticate("auth-session") {
         get("/file/{id?}") {
             call.respondHtml { ImagePage(call).render(this) }
+        }
+        get("/upload") {
+            call.respondHtml { UploadPage(call).render(this) }
         }
     }
 }
@@ -46,7 +50,7 @@ fun Route.loginRoutes() {
             val principal = call.principal<UserIdPrincipal>()
             // Set the cookie
             call.sessions.set(principal)
-            call.respondRedirect("/")
+            call.respondRedirect("/upload")
         }
     }
 }
