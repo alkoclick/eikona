@@ -12,7 +12,7 @@ object StandardElements {
         div("ui two item menu") {
             div("ui fluid container") {
                 p("ui item") {
-                    text("User: ${user?.name ?: "Not logged in"}")
+                    text("User: ${user.name}")
                 }
                 a(href = "/logout", classes = "ui item") {
                     text("Logout")
