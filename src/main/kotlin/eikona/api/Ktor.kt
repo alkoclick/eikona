@@ -4,15 +4,17 @@ import appInfoRoutes
 import eikona.di.DI
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import kotlin.collections.set
 
 
+@Suppress("unused")
 fun Application.config() {
     install(Sessions) {
-        cookie<UserIdPrincipal>(
+        cookie<UserSessionPrincipal>(
             // We set a cookie by this name upon login.
             "eikona",
             storage = DI.sessionStorage
@@ -28,28 +30,8 @@ fun Application.config() {
             challenge {
                 call.respondRedirect("/login")
             }
-            validate { session: UserIdPrincipal -> session }
+            validate { session: UserSessionPrincipal -> session }
         }
-        form("auth-form") {
-            userParamName = "username"
-            passwordParamName = "password"
-            validate { credentials ->
-                UserIdPrincipal(credentials.name)
-            }
-        }
-//        oauth {
-//            urlProvider = { "" }
-//            providerLookup = {
-//                OAuthServerSettings.OAuth2ServerSettings(
-//                    name = "TestAuth0",
-//                    authorizeUrl = "",
-//                    requestMethod = HttpMethod.Post,
-//                    clientId = "1vNXgpgZa25PGWt33JiYKG3OMb2kNrPL",
-//                    clientSecret = "gMHqaLxD-CzVK9uDr0Gr1Ok-19gRq1SqPcbJA2fIeOaIMyVHeCcMbJr1cciIg4Ez",
-//                )
-//            }
-//            client = httpClient
-//        }
     }
     routing {
         appInfoRoutes()
@@ -59,4 +41,5 @@ fun Application.config() {
     }
 }
 
+data class UserSessionPrincipal(val id: String, val name: String) : Principal
 

@@ -2,9 +2,11 @@
 Hobby project. Eikona will be a private photo hosting application that doesn't monetize your data
 
 ## Current goals
-- Store credentials / work with external providers
+- Validate JWTs
+- Ensure session persistence works
 - Allow sharing with public audiences (set up share route and some UUID corresponding to public users )
 - Make a user home page
+- Abstract JSON functionality
 - Readd list functionality based on permissions?
 
 ## Tooling
@@ -20,6 +22,6 @@ Hobby project. Eikona will be a private photo hosting application that doesn't m
 
 `gradle run` then check http://0.0.0.0:8080
 
-#### Pending
+#### Pending Thoughts & Decisions
 - What toolset to use for permissions? Themis looks interesting
 - OpenAPI for the API specs? Ktor compatibility is poor

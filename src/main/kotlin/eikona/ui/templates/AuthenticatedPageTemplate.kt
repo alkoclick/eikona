@@ -1,11 +1,13 @@
 package eikona.ui.templates
 
+import eikona.api.UserSessionPrincipal
 import eikona.ui.templates.StandardElements.topBar
-import io.ktor.server.auth.*
-import kotlinx.html.*
+import kotlinx.html.HTML
+import kotlinx.html.body
+import kotlinx.html.head
 
 interface AuthenticatedPageTemplate : DefaultPageTemplate {
-    val user: UserIdPrincipal
+    val user: UserSessionPrincipal
 
     override fun render(html: HTML) {
         html.head {

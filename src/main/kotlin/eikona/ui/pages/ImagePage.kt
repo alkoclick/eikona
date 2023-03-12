@@ -1,5 +1,6 @@
 package eikona.ui.pages
 
+import eikona.api.UserSessionPrincipal
 import eikona.ui.templates.AuthenticatedPageTemplate
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -7,7 +8,7 @@ import kotlinx.html.*
 
 class ImagePage(call: ApplicationCall) : AuthenticatedPageTemplate {
     val imgUuid = call.parameters["id"]
-    override val user: UserIdPrincipal = call.principal()!!
+    override val user: UserSessionPrincipal = call.principal()!!
 
     override fun renderHead(head: HEAD) {
         super.renderHead(head)
