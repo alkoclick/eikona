@@ -12,7 +12,7 @@ val Config = ConfigLoaderBuilder.default()
 
 data class ConfigSchema(
     val storage: Storage,
-    val auth: AuthConfig,
+    val auth: Auth,
 ) {
 
     data class Storage(
@@ -23,7 +23,7 @@ data class ConfigSchema(
         sealed class ObjectStorage {
             data class MapDBFile(val filename: String) : ObjectStorage()
             data class S3(val uri: String) : ObjectStorage()
-            object InMemory: ObjectStorage()
+            object InMemory : ObjectStorage()
         }
 
         sealed class RelationalStorage(
@@ -42,14 +42,21 @@ data class ConfigSchema(
         }
 
         sealed class SessionsStorage {
-            data class DirectorySessionStorage(val filename: String): SessionsStorage()
-            object MemorySessionStorage: SessionsStorage()
+            data class DirectorySessionStorage(val filename: String) : SessionsStorage()
+            object MemorySessionStorage : SessionsStorage()
         }
     }
 
-    data class AuthConfig(
+    data class Auth(
         val audience: String,
-        val client: String,
+        val client_id: String,
         val issuer: String,
-    )
+        val secret: String,
+        val endpoints: AuthEndpoints,
+    ) {
+        data class AuthEndpoints(
+            val authorize: String,
+            val token: String,
+        )
+    }
 }

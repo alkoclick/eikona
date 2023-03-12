@@ -22,7 +22,7 @@ fun Route.blobRouting() {
                     call.respond(HttpStatusCode.BadRequest)
                     return@post
                 }
-                val userUUID = UUID.fromString(call.principal<UserIdPrincipal>()?.name.toString())
+                val userUUID = UUID.fromString(call.principal<UserSessionPrincipal>()?.name.toString())
                 // retrieve all bytes (suspending)
                 val bytes = withContext(Dispatchers.IO) { call.receiveStream().readAllBytes() }
                 when (val storageResponse = BlobService.create(UUID.randomUUID(), bytes, userUUID)) {
@@ -33,7 +33,7 @@ fun Route.blobRouting() {
             }
 
             get("{id?}") {
-                val userUUID = UUID.fromString(call.principal<UserIdPrincipal>()?.name.toString())
+                val userUUID = UUID.fromString(call.principal<UserSessionPrincipal>()?.name.toString())
                 when (val storageResponse = BlobService.read(UUID.fromString(call.parameters["id"]), userUUID)) {
                     is StorageResponse.FileNotFound -> call.respond(HttpStatusCode.NotFound, storageResponse.message)
                     is StorageResponse.Invalid -> call.respond(HttpStatusCode.NotFound, storageResponse.message)
@@ -45,7 +45,7 @@ fun Route.blobRouting() {
             }
 
             delete("{id?}") {
-                val userUUID = UUID.fromString(call.principal<UserIdPrincipal>()?.name.toString())
+                val userUUID = UUID.fromString(call.principal<UserSessionPrincipal>()?.name.toString())
                 when (val storageResponse = BlobService.delete(UUID.fromString(call.parameters["id"]), userUUID)) {
                     is StorageResponse.FileNotFound -> call.respond(HttpStatusCode.NotFound, storageResponse.message)
                     is StorageResponse.Invalid -> call.respond(HttpStatusCode.NotFound, storageResponse.message)

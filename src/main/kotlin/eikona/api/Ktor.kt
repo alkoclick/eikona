@@ -14,9 +14,10 @@ import java.util.concurrent.TimeUnit
 import kotlin.collections.set
 
 
+@Suppress("unused")
 fun Application.config() {
     install(Sessions) {
-        cookie<UserIdPrincipal>(
+        cookie<UserSessionPrincipal>(
             // We set a cookie by this name upon login.
             "eikona",
             storage = DI.sessionStorage
@@ -32,14 +33,7 @@ fun Application.config() {
             challenge {
                 call.respondRedirect("/login")
             }
-            validate { session: UserIdPrincipal -> session }
-        }
-        form("auth-form") {
-            userParamName = "username"
-            passwordParamName = "password"
-            validate { credentials ->
-                UserIdPrincipal(credentials.name)
-            }
+            validate { session: UserSessionPrincipal -> session }
         }
         val jwkProvider = JwkProviderBuilder(Config.auth.issuer)
             .cached(10, 24, TimeUnit.HOURS)
@@ -57,6 +51,8 @@ fun Application.config() {
         loginRoutes()
     }
 }
+
+data class UserSessionPrincipal(val id: String, val name: String) : Principal
 
 fun validateCreds(credential: JWTCredential): JWTPrincipal? =
     credential.payload
