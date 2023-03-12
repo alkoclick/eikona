@@ -1,8 +1,6 @@
 package eikona.api
 
 import appInfoRoutes
-import com.auth0.jwk.JwkProviderBuilder
-import eikona.Config
 import eikona.di.DI
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -10,7 +8,6 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
-import java.util.concurrent.TimeUnit
 import kotlin.collections.set
 
 
@@ -35,14 +32,6 @@ fun Application.config() {
             }
             validate { session: UserSessionPrincipal -> session }
         }
-        val jwkProvider = JwkProviderBuilder(Config.auth.issuer)
-            .cached(10, 24, TimeUnit.HOURS)
-            .rateLimited(10, 1, TimeUnit.MINUTES)
-            .build()
-        jwt("auth0") {
-            verifier(jwkProvider, Config.auth.issuer)
-            validate { credential -> validateCreds(credential) }
-        }
     }
     routing {
         appInfoRoutes()
@@ -54,7 +43,3 @@ fun Application.config() {
 
 data class UserSessionPrincipal(val id: String, val name: String) : Principal
 
-fun validateCreds(credential: JWTCredential): JWTPrincipal? =
-    credential.payload
-        .takeIf { it.audience.contains(Config.auth.audience) }
-        ?.let { JWTPrincipal(it) }
