@@ -137,3 +137,4 @@ mapDb
 sqlite.db
 sessions
 dev-notes.yaml
+*-secrets.conf

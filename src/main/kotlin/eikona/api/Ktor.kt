@@ -1,12 +1,16 @@
 package eikona.api
 
 import appInfoRoutes
+import com.auth0.jwk.JwkProviderBuilder
+import eikona.Config
 import eikona.di.DI
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
+import java.util.concurrent.TimeUnit
 import kotlin.collections.set
 
 
@@ -37,19 +41,14 @@ fun Application.config() {
                 UserIdPrincipal(credentials.name)
             }
         }
-//        oauth {
-//            urlProvider = { "" }
-//            providerLookup = {
-//                OAuthServerSettings.OAuth2ServerSettings(
-//                    name = "TestAuth0",
-//                    authorizeUrl = "",
-//                    requestMethod = HttpMethod.Post,
-//                    clientId = "1vNXgpgZa25PGWt33JiYKG3OMb2kNrPL",
-//                    clientSecret = "gMHqaLxD-CzVK9uDr0Gr1Ok-19gRq1SqPcbJA2fIeOaIMyVHeCcMbJr1cciIg4Ez",
-//                )
-//            }
-//            client = httpClient
-//        }
+        val jwkProvider = JwkProviderBuilder(Config.auth.issuer)
+            .cached(10, 24, TimeUnit.HOURS)
+            .rateLimited(10, 1, TimeUnit.MINUTES)
+            .build()
+        jwt("auth0") {
+            verifier(jwkProvider, Config.auth.issuer)
+            validate { credential -> validateCreds(credential) }
+        }
     }
     routing {
         appInfoRoutes()
@@ -59,4 +58,7 @@ fun Application.config() {
     }
 }
 
-
+fun validateCreds(credential: JWTCredential): JWTPrincipal? =
+    credential.payload
+        .takeIf { it.audience.contains(Config.auth.audience) }
+        ?.let { JWTPrincipal(it) }

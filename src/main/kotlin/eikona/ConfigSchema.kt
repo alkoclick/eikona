@@ -6,11 +6,13 @@ import com.sksamuel.hoplite.addResourceSource
 val Config = ConfigLoaderBuilder.default()
     .addResourceSource("/application.conf")
     .addResourceSource("/application-test.conf", optional = true)
+    .addResourceSource("/application-secrets.conf", optional = true)
     .build()
     .loadConfigOrThrow<ConfigSchema>()
 
 data class ConfigSchema(
     val storage: Storage,
+    val auth: AuthConfig,
 ) {
 
     data class Storage(
@@ -44,4 +46,10 @@ data class ConfigSchema(
             object MemorySessionStorage: SessionsStorage()
         }
     }
+
+    data class AuthConfig(
+        val audience: String,
+        val client: String,
+        val issuer: String,
+    )
 }

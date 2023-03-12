@@ -1,10 +1,12 @@
 package eikona.api
 
+import eikona.Config
 import eikona.di.DI
 import eikona.ui.pages.HomePage
 import eikona.ui.pages.ImagePage
 import eikona.ui.pages.LoginPage
 import eikona.ui.pages.UploadPage
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.html.*
@@ -38,19 +40,29 @@ fun Route.loginRoutes() {
         }
     }
     get("/login") {
-        call.respondHtml { LoginPage().render(this) }
+        val authParams = ParametersBuilder().apply {
+            append("response_type","code")
+            append("client_id", eikona.Config.Auth.client)
+            append("redirect_uri", "http://localhost:8080/callback")
+            append("prompt", "login")
+        }.build().formUrlEncode()
+        call.respondRedirect("https://${eikona.Config.Auth.issuer}/authorize?${authParams}")
+//        call.respondHtml { LoginPage().render(this) }
     }
     get("/logout") {
         call.sessions.clear<UserIdPrincipal>()
         DI.sessionStorage.invalidate(call.principal<UserIdPrincipal>()?.name.toString())
         call.respondRedirect("/login")
     }
-    authenticate("auth-form") {
-        post("/login") {
-            val principal = call.principal<UserIdPrincipal>()
-            // Set the cookie
-            call.sessions.set(principal)
-            call.respondRedirect("/upload")
-        }
+    get("/callback") {
+        println(call.request)
     }
+//    authenticate("auth-form") {
+//        post("/login") {
+//            val principal = call.principal<UserIdPrincipal>()
+//            // Set the cookie
+//            call.sessions.set(principal)
+//            call.respondRedirect("/upload")
+//        }
+//    }
 }
