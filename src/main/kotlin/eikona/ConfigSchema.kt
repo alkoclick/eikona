@@ -11,9 +11,28 @@ val Config = ConfigLoaderBuilder.default()
     .loadConfigOrThrow<ConfigSchema>()
 
 data class ConfigSchema(
-    val storage: Storage,
     val auth: Auth,
+    val logger: Logger,
+    val storage: Storage,
 ) {
+
+    data class Auth(
+        val audience: String,
+        val client_id: String,
+        val issuer: String,
+        val secret: String,
+        val endpoints: AuthEndpoints,
+    ) {
+        data class AuthEndpoints(
+            val authorize: String,
+            val token: String,
+        )
+    }
+
+    data class Logger(
+        val base_level: String,
+        val filters: Map<String, String>
+    )
 
     data class Storage(
         val objects: ObjectStorage,
@@ -47,16 +66,4 @@ data class ConfigSchema(
         }
     }
 
-    data class Auth(
-        val audience: String,
-        val client_id: String,
-        val issuer: String,
-        val secret: String,
-        val endpoints: AuthEndpoints,
-    ) {
-        data class AuthEndpoints(
-            val authorize: String,
-            val token: String,
-        )
-    }
 }

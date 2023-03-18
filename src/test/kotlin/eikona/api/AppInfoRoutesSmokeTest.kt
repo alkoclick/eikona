@@ -11,7 +11,7 @@ class AppInfoRoutesSmokeTest {
 
     @Test
     fun testHealth() = testApplication {
-        val response = client.get("/health")
+        val response = client.get("/api/health")
         assertEquals(HttpStatusCode.OK, response.status)
         assertEquals("Ok!", response.bodyAsText())
     }

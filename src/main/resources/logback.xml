@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>&#8203;[%date{ISO8601}] [%level] [%logger] - %msg%n</pattern>
+        </encoder>
+        <filter class="eikona.utils.logger.LoggerFilter"/>
+    </appender>
+
+    <appender name="METRICS" class="io.prometheus.client.logback.InstrumentedAppender"/>
+
+    <!-- We keep this at debug only for the eikona logger, it's INFO+ for everyone else -->
+    <root level="debug">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="METRICS"/>
+    </root>
+
+</configuration>
