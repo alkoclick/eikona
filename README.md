@@ -5,13 +5,16 @@ Hobby project. Eikona will be a private photo hosting application that doesn't m
 - Ensure session persistence works
 - Allow sharing with public audiences (set up share route and some UUID corresponding to public users )
 - Make a user home page
-- Abstract JSON functionality
 - Readd list functionality based on permissions?
 
 ## Tooling
 
 - Kotlin
 - Ktor for the API server
+- Arrow for functional types
+- Jackson for JSON parsing
+- OkHTTP for HTTP client work
+- Prometheus simpleclient for metrics
 - Junit + Kotest for testing
 - SQL DB for relational data
 - S3 compatible block storage (S3 for prod and Minio for testing)
