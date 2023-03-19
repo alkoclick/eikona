@@ -38,6 +38,7 @@ fun Application.config() {
         blobRouting()
         uiRoutes()
         loginRoutes()
+        oidcRoutes()
     }
 }
 
