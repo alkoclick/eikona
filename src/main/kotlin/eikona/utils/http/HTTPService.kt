@@ -3,6 +3,7 @@ package eikona.utils.http
 import eikona.utils.http.HTTPRequestMethod.*
 import eikona.utils.http.HTTPResponse.Error
 import eikona.utils.http.HTTPResponse.Received
+import eikona.utils.logger.Logger
 import eikona.utils.metrics.Metrics.HTTPRequests.httpRequests
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
@@ -20,6 +21,7 @@ object HTTPService {
     private val client: OkHttpClient = OkHttpClient()
     private val idRegex by lazy { "(/\\d+)+?".toRegex() }
     private val queryParamRegex by lazy { "(\\?.*)".toRegex() }
+    private val logger = Logger(javaClass)
 
     /**
      * Implements a head call with no body
@@ -67,6 +69,8 @@ object HTTPService {
     private fun executeRequest(url: String, method: HTTPRequestMethod, body: String? = null, vararg headers: Pair<String, String>): HTTPResponse {
         lateinit var response: HTTPResponse
 
+        val sanitizedURL = removeIdsFromPathForMetrics(url)
+        logger.debug("Executing $method request to $sanitizedURL")
         val elapsedSeconds = TimeUnit.MILLISECONDS.toSeconds(
             measureTimeMillis {
                 response = flow(url = url, method = method, body = body, headers = headers)
@@ -77,7 +81,7 @@ object HTTPService {
             is Received -> (response as Received).code.toString()
             is Error -> "-1"
         }
-        httpRequests.labels(removeIdsFromPathForMetrics(url), method.name.lowercase(), statusCode).observe(elapsedSeconds.toDouble())
+        httpRequests.labels(sanitizedURL, method.name.lowercase(), statusCode).observe(elapsedSeconds.toDouble())
 
         return response
     }

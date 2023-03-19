@@ -1,18 +1,18 @@
 package eikona.api
 
-import com.auth0.jwt.JWT
-import com.beust.klaxon.Klaxon
+import arrow.core.Either
 import eikona.Config
-import eikona.api.models.OAuthIdTokenPayload
 import eikona.api.models.OIDCResponse
 import eikona.di.DI
 import eikona.ui.pages.HomePage
 import eikona.ui.pages.ImagePage
 import eikona.ui.pages.LoginPage
 import eikona.ui.pages.UploadPage
-import io.ktor.client.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
+import eikona.utils.http.HTTPResponse
+import eikona.utils.http.HTTPService
+import eikona.utils.json.toModel
+import eikona.utils.jwt.JWTService
+import eikona.utils.logger.Logger
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -22,7 +22,10 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import java.io.File
-import java.util.*
+
+object UIRoutes {
+    internal val logger = Logger(javaClass)
+}
 
 fun Route.uiRoutes() {
     static("assets") {
@@ -73,32 +76,28 @@ fun Route.loginRoutes() {
     }
 
     get("/callback") {
-        client.post(Config.auth.endpoints.token) {
-            contentType(ContentType.Application.FormUrlEncoded)
-            setBody(ParametersBuilder().apply {
-                append("grant_type", "authorization_code")
-                append("code", call.request.queryParameters["code"]!!)
-                append("client_id", Config.auth.client_id)
-                append("client_secret", Config.auth.secret)
-                append("redirect_uri", "http://localhost:8080/upload")
-            }.build().formUrlEncode())
-        }.let {
-            val oidcResponse: OIDCResponse = Klaxon().parse(it.bodyAsText())!!
+        val response = HTTPService.post(Config.auth.endpoints.token, ParametersBuilder().apply {
+            append("grant_type", "authorization_code")
+            append("code", call.request.queryParameters["code"]!!)
+            append("client_id", Config.auth.client_id)
+            append("client_secret", Config.auth.secret)
+            append("redirect_uri", "http://localhost:8080/upload")
+        }.build().formUrlEncode(), "Content-Type" to "application/x-www-form-urlencoded")
 
-            // Convert to JWT
-            val jwt = JWT.decode(oidcResponse.id_token)
-            println(jwt.payload)
+        when (response) {
+            is HTTPResponse.Error -> UIRoutes.logger.panic(response.message)
+            is HTTPResponse.Received -> {
+                val oidcResponse = response.body?.toModel(OIDCResponse::class)
 
-            // Verify JWT
-            // TODO
-
-            // Unwrap JWT
-            val userInfo: OAuthIdTokenPayload = Klaxon().parse(String(Base64.getDecoder().decode(jwt.payload)))!!
-
-            call.sessions.set(UserSessionPrincipal(userInfo.sub, userInfo.name))
+                when (val jwt = JWTService.decode(oidcResponse?.id_token.orEmpty())) {
+                    is Either.Left -> UIRoutes.logger.panic("JWT decoding or verification failed: ", jwt.value)
+                    is Either.Right -> {
+                        // TODO Should use the name
+                        call.sessions.set(UserSessionPrincipal(jwt.value.subject, jwt.value.token))
+                        call.respondRedirect("http://localhost:8080/upload")
+                    }
+                }
+            }
         }
-        call.respondRedirect("http://localhost:8080/upload")
     }
 }
-
-val client by lazy { HttpClient() }

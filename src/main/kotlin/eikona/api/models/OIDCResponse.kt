@@ -6,10 +6,3 @@ data class OIDCResponse(
     val scope: String = "",
     val expires_in: Int,
 )
-
-data class OAuthIdTokenPayload(
-    val aud: String,
-    val iss: String,
-    val name: String,
-    val sub: String,
-)

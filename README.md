@@ -2,7 +2,6 @@
 Hobby project. Eikona will be a private photo hosting application that doesn't monetize your data
 
 ## Current goals
-- Validate JWTs
 - Ensure session persistence works
 - Allow sharing with public audiences (set up share route and some UUID corresponding to public users )
 - Make a user home page
