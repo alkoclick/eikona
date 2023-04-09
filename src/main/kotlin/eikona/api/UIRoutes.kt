@@ -13,7 +13,6 @@ import io.ktor.server.http.content.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
-import java.io.File
 
 object UIRoutes {
     internal val logger = Logger(javaClass)
@@ -21,8 +20,8 @@ object UIRoutes {
 
 fun Route.uiRoutes() {
     static("assets") {
-        staticRootFolder = File("src/main/resources/assets")
-        files(".")
+        staticBasePackage = "assets"
+        resources(".")
     }
     authenticate("auth-session") {
         get("/file/{id?}") {

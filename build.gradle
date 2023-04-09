@@ -14,11 +14,23 @@ buildscript {
     }
 }
 
+plugins {
+    id 'io.miret.etienne.sass' version '1.4.2'
+}
 apply plugin: 'kotlin'
 apply plugin: 'application'
 
 group = 'io.eikona'
 mainClassName = 'Entrypoint'
+
+compileSass {
+    outputDir = project.file("${buildDir}/resources/main/assets/css")
+}
+
+jar {
+    dependsOn compileSass
+    from compileSass.outputDir
+}
 
 compileKotlin {
     kotlinOptions.jvmTarget = "11"
