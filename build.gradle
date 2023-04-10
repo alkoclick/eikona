@@ -16,6 +16,7 @@ buildscript {
 
 plugins {
     id 'io.miret.etienne.sass' version '1.4.2'
+    id 'com.google.cloud.tools.jib' version '3.3.1'
 }
 apply plugin: 'kotlin'
 apply plugin: 'application'
@@ -30,6 +31,16 @@ compileSass {
 jar {
     dependsOn compileSass
     from compileSass.outputDir
+}
+
+jib {
+    to {
+        image = "ghcr.io/alkoclick/eikona"
+        auth {
+            username = System.getenv('GITHUB_ACTOR') ?: "default"
+            password = System.getenv('GITHUB_TOKEN') ?: "default"
+        }
+    }
 }
 
 compileKotlin {
