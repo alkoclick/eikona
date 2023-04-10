@@ -36,6 +36,7 @@ compileKotlin {
     kotlinOptions.jvmTarget = "11"
 }
 compileTestKotlin {
+    dependsOn compileSass
     kotlinOptions.jvmTarget = "11"
 }
 
