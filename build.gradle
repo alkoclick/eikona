@@ -76,7 +76,7 @@ dependencies {
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jackson_version"
 
     // Various utils
-    implementation 'ch.qos.logback:logback-classic:1.4.4'
+    implementation 'ch.qos.logback:logback-classic:1.4.6'
     implementation "com.squareup.okhttp3:okhttp:4.10.0"
 
     // Monitoring
