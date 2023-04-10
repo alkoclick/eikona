@@ -1,10 +1,7 @@
 package eikona.api
 
 import eikona.di.DI
-import eikona.ui.pages.HomePage
-import eikona.ui.pages.ImagePage
-import eikona.ui.pages.LoginPage
-import eikona.ui.pages.UploadPage
+import eikona.ui.pages.*
 import eikona.utils.logger.Logger
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -24,19 +21,17 @@ fun Route.uiRoutes() {
         resources(".")
     }
     authenticate("auth-session") {
+        get("/") {
+            call.respondHtml { HomePage(call.principal()!!).render(this) }
+        }
         get("/file/{id?}") {
             call.respondHtml { ImagePage(call).render(this) }
         }
+        get("/collection/{id?}") {
+            call.respondHtml { CollectionPage(call).render(this) }
+        }
         get("/upload") {
             call.respondHtml { UploadPage(call).render(this) }
-        }
-    }
-
-    authenticate("auth-session") {
-        get("/") {
-            call.respondHtml {
-                HomePage(call.principal()!!).render(this)
-            }
         }
     }
 }
