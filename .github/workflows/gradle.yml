@@ -21,7 +21,7 @@ jobs:
 
     runs-on: ubuntu-latest
     env:
-      REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN }}
     steps:
       - name: Debug GH actor
         run: echo $GITHUB_ACTOR

@@ -35,11 +35,14 @@ jar {
 
 jib {
     to {
-        image = "ghcr.io/alkoclick/eikona"
+        image = 'ghcr.io/alkoclick/eikona'
         auth {
-            username = System.getenv('GITHUB_ACTOR') ?: "default"
-            password = System.getenv('REGISTRY_TOKEN') ?: "default"
+            username = 'alkoclick'
+            password = System.getenv('REGISTRY_TOKEN')
         }
+    }
+    container {
+        labels = ['org.opencontainers.image.source': 'https://github.com/alkoclick/eikona']
     }
 }
 
