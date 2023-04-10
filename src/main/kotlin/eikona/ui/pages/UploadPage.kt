@@ -18,10 +18,11 @@ class UploadPage(call: ApplicationCall) : AuthenticatedPageTemplate {
 
     override fun renderBody(body: BODY) {
         body.apply {
-            div("ui middle aligned center aligned fullpage grid") {
-                div("column") {
-                    input(type = InputType.file) { id = "uploader" }
-                    button(type = ButtonType.button, classes = "large ui violet button") {
+            div("px-4 py-5 my-5 text-center") {
+                div("col-lg-6 mx-auto") {
+                    // TODO Rebuild this functionality
+                    // input(type = InputType.file) { id = "uploader" }
+                    button(type = ButtonType.button, classes = "btn btn-lg btn-primary mb-3") {
                         onClick = "uploadFile(\"uploader\")"
                         text("Upload files")
                     }
