@@ -23,6 +23,8 @@ jobs:
     env:
       REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
+      - name: Debug GH actor
+        run: echo $GITHUB_ACTOR
       - uses: actions/checkout@v3
       - name: Set up JDK 11
         uses: actions/setup-java@v3
