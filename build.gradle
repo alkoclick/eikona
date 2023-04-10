@@ -37,8 +37,8 @@ jib {
     to {
         image = "ghcr.io/alkoclick/eikona"
         auth {
-            username = System.getenv('GITHUB_ACTOR') ?: "default"
-            password = System.getenv('GITHUB_TOKEN') ?: "default"
+            username = "alkoclick"
+            password = System.getenv('REGISTRY_TOKEN') ?: "default"
         }
     }
 }
