@@ -52,7 +52,7 @@ dependencies {
 
     // Config
     implementation 'com.sksamuel.hoplite:hoplite-core:2.6.3'
-    implementation 'com.sksamuel.hoplite:hoplite-hocon:2.6.3'
+    implementation 'com.sksamuel.hoplite:hoplite-hocon:2.7.3'
 
     // JSON
     // Jackson
