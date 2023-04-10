@@ -18,17 +18,6 @@ object OIDCRoutes {
 }
 
 fun Route.oidcRoutes() {
-    get("/authenticate") {
-        val authParams = ParametersBuilder().apply {
-            append("response_type", "code")
-            append("client_id", Config.auth.client_id)
-            append("redirect_uri", "http://localhost:8080/callback")
-            append("prompt", "login")
-            append("scope", "openid profile")
-            append("state", "abcd")
-        }.build().formUrlEncode()
-        call.respondRedirect("${Config.auth.endpoints.authorize}?${authParams}")
-    }
 
     get("/callback") {
         val response = HTTPService.post(Config.auth.endpoints.token, ParametersBuilder().apply {

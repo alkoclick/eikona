@@ -1,6 +1,8 @@
 package eikona.ui.pages
 
+import eikona.Config
 import eikona.ui.templates.BootstrapPageTemplate
+import io.ktor.http.*
 import kotlinx.html.*
 
 class LoginPage : BootstrapPageTemplate {
@@ -19,7 +21,7 @@ class LoginPage : BootstrapPageTemplate {
                 }
 
                 div(classes = "d-flex gap-4 justify-content-center mb-3") {
-                    button(classes = "btn btn-outline-primary d-inline-flex align-items-center", type = ButtonType.submit) {
+                    a(href = buildLink("apple"), classes = "btn btn-outline-primary d-inline-flex align-items-center") {
                         SVG(attributesMapOf("classes", "bi bi-apple", "viewBox", "0 0 16 16", "width", "20", "height", "20"), consumer).visit {
                             path(
                                 classes = null,
@@ -33,7 +35,7 @@ class LoginPage : BootstrapPageTemplate {
                         text("Sign in with Apple")
                     }
 
-                    button(classes = "btn btn-outline-primary d-inline-flex align-items-center", type = ButtonType.submit) {
+                    a(href = buildLink("google-oauth2"), classes = "btn btn-outline-primary d-inline-flex align-items-center") {
                         SVG(attributesMapOf("classes", "bi bi-google", "viewBox", "0 0 24 24", "width", "20", "height", "20", "fill", "none"), consumer).visit {
                             path(
                                 classes = null,
@@ -72,16 +74,29 @@ class LoginPage : BootstrapPageTemplate {
 
                 button(classes = "w-100 btn btn-lg btn-primary mb-3", type = ButtonType.submit) { text("Sign in") }
 
-                p { a(href = "/authenticate", classes = "link-secondary") { text("Forgot password?") } }
+                p { a(href = buildLink(), classes = "link-secondary") { text("Forgot password?") } }
                 p {
                     text("New to Eikona? Create an account ")
-                    a(href = "/authenticate", classes = "link-primary") { text("here") }
+                    a(href = buildLink(), classes = "link-primary") { text("here") }
                 }
             }
 
         }
     }
 }
+
+private fun buildLink(provider: String? = null): String =
+    ParametersBuilder().apply {
+        append("response_type", "code")
+        append("client_id", Config.auth.client_id)
+        provider?.let { append("connection", it) }
+        append("redirect_uri", "http://localhost:8080/callback")
+        append("prompt", "login")
+        append("scope", "openid profile")
+        append("state", "abcd")
+    }.build().formUrlEncode().let {
+        "${Config.auth.endpoints.authorize}?$it"
+    }
 
 @HtmlTagMarker
 inline fun FlowOrPhrasingContent.path(classes: String? = null, d: String? = null, fill: String? = null, crossinline block: Path.() -> Unit = {}): Unit =
