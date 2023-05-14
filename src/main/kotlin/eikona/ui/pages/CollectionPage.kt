@@ -4,7 +4,9 @@ import eikona.api.UserSessionPrincipal
 import eikona.ui.templates.AuthenticatedPageTemplate
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import kotlinx.html.*
+import kotlinx.html.BODY
+import kotlinx.html.DIV
+import kotlinx.html.div
 
 class CollectionPage(val call: ApplicationCall) : AuthenticatedPageTemplate {
     override val user: UserSessionPrincipal = call.principal()!!
@@ -35,14 +37,7 @@ class CollectionPage(val call: ApplicationCall) : AuthenticatedPageTemplate {
         div(classes = "col") {
             div(classes = "card shadow-sm") {
                 div(classes = "media-preview") {
-                    if (album.coverHref.isNullOrBlank()) {
-                        SVG(attributesMapOf("classes", "bi bi-image", "fill", "currentColor", "viewBox", "0 0 16 16"), consumer).visit {
-                            path(d = "M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z")
-                            path(d = "M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z")
-                        }
-                    } else {
-                        img(src = album.coverHref, classes = "card-img-top")
-                    }
+                    coverImage(album)
                 }
             }
         }

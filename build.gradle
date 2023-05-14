@@ -38,7 +38,7 @@ jib {
         image = 'ghcr.io/alkoclick/eikona'
         auth {
             username = System.getenv('GITHUB_ACTOR') ?: 'alkoclick'
-            password = System.getenv('REGISTRY_TOKEN')
+            password = System.getenv('REGISTRY_TOKEN') ?: ''
         }
     }
     container {
