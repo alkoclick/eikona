@@ -85,7 +85,7 @@ dependencies {
     implementation "io.prometheus:simpleclient_logback:$prometheus_version"
 
     // Persistence stuff
-    implementation 'org.mapdb:mapdb:3.0.8'
+    implementation 'org.mapdb:mapdb:3.0.9'
     implementation 'org.xerial:sqlite-jdbc:3.39.3.0'
     implementation "org.jetbrains.exposed:exposed-core:$exposed_version"
     implementation "org.jetbrains.exposed:exposed-jdbc:$exposed_version"
