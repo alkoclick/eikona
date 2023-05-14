@@ -1,7 +1,7 @@
 buildscript {
     ext.kotlin_version = "1.7.10"
     ext.jackson_version = "2.14.2"
-    ext.ktor_version = '2.1.1'
+    ext.ktor_version = '2.2.4'
     ext.exposed_version = '0.39.1'
     ext.prometheus_version = '0.16.0'
 
